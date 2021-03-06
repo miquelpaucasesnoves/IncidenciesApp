@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">IncidenciesApp</string>
+    <string name="num_incidencia">Num. Incidencia</string>
+    <string name="textview1">TextView</string>
+    <string name="textview2">TextView</string>
+    <string name="data_incidencia">Data Incidencia</string>
+    <string name="nom_tecnic">Nom tecnic</string>
+    <string name="matricula_tren">Matricula Tren</string>
+    <string name="textview3">TextView</string>
+    <string name="textview4">TextView</string>
+    <string name="descripcio">Descripcio</string>
+    <string name="textview5">TextView</string>
 </resources>

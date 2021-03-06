@@ -6,43 +6,46 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="202dp"
-        android:layout_height="349dp"
-        tools:layout_editor_absoluteX="208dp"
-        tools:layout_editor_absoluteY="381dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="196dp"
-        android:layout_height="383dp"
-        tools:layout_editor_absoluteX="214dp"
-        tools:layout_editor_absoluteY="-4dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="206dp"
-        android:layout_height="344dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
-        app:layout_constraintHorizontal_bias="0.0"
+    <Button
+        android:id="@+id/btnActivityTren"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:text="Trens"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/imageButton4"
-        android:layout_width="208dp"
-        android:layout_height="385dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="6dp"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton3"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+    <Button
+        android:id="@+id/btnActivityTecnics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:text="Tecnics"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnActivityTren" />
+
+    <Button
+        android:id="@+id/btnActivityIncidencia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        android:text="Incidencia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnActivityTecnics" />
+
+    <Button
+        android:id="@+id/btnActivityLlistatIncidencies"
+        android:layout_width="91dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="84dp"
+        android:text="Consultar Incidencies"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnActivityIncidencia" />
 </androidx.constraintlayout.widget.ConstraintLayout>

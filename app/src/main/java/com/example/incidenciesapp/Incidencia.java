@@ -4,23 +4,32 @@ import java.util.Date;
 
 public class Incidencia {
 
-    String trenIdIncidencia;
+    long incidenciaId;
+    String matriculaTrenIncidencia;
     String matriculaTecnicIncidencia;
-    Date dataIncidencia;
+    String dataIncidencia;
     String descripcioIncidencia;
     String solucioIncidencia;
     byte[] fotoIncidencia;
 
-    public Incidencia(String tren,String tecnic,Date data,String descripcio){
+    public Incidencia(){
         super();
     }
 
+    public void setIncidenciaId(long incidenciaId) {
+        this.incidenciaId = incidenciaId;
+    }
+
+    public long getIncidenciaId() {
+        return incidenciaId;
+    }
+
     public String getTrenIdIncidencia() {
-        return trenIdIncidencia;
+        return matriculaTrenIncidencia;
     }
 
     public void setTrenIdIncidencia(String trenIdIncidencia) {
-        this.trenIdIncidencia = trenIdIncidencia;
+        this.matriculaTrenIncidencia = trenIdIncidencia;
     }
 
     public String getMatriculaTecnicIncidencia() {
@@ -31,11 +40,9 @@ public class Incidencia {
         this.matriculaTecnicIncidencia = matriculaTecnicIncidencia;
     }
 
-    public Date getDataIncidencia() {
-        return dataIncidencia;
-    }
+    public String getDataIncidencia() {return dataIncidencia;  }
 
-    public void setDataIncidencia(Date dataIncidencia) {
+    public void setDataIncidencia(String dataIncidencia) {
         this.dataIncidencia = dataIncidencia;
     }
 

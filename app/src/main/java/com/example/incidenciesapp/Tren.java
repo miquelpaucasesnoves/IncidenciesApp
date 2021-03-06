@@ -2,21 +2,21 @@ package com.example.incidenciesapp;
 
 public class Tren {
 
-    String trenId;
+    String matriculaTren;
 
     public Tren(){
         super();
     }
 
     public String getTrenId() {
-        return trenId;
+        return matriculaTren;
     }
 
     public void setTrenId(String trenId) {
-        this.trenId = trenId;
+        this.matriculaTren = trenId;
     }
 
     public Tren(String matricula){
-        this.trenId = matricula;
+        this.matriculaTren = matricula;
     }
 }

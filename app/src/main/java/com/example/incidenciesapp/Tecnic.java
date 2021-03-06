@@ -2,21 +2,20 @@ package com.example.incidenciesapp;
 
 public class Tecnic {
 
-    String matricula;
+    String matriculaTecnic;
     String nomTecnic;
     String telefonTecnic;
 
-    public Tecnic(String matricula, String nomTecnic) {
-        this.matricula = matricula;
-        this.nomTecnic = nomTecnic;
+    public Tecnic(){
+        super();
     }
 
     public String getMatricula() {
-        return matricula;
+        return matriculaTecnic;
     }
 
     public void setMatricula(String matricula) {
-        this.matricula = matricula;
+        this.matriculaTecnic = matricula;
     }
 
     public String getNomTecnic() {
