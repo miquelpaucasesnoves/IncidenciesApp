@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+//Classe que volia implementar per fer un sharedPreferences perque
+//guardi la darrera Activity quan es tanca la APP
+//no trobava quina classe havia de ser la variable Acitvity1(Linea 25 i 27)
 public class Dispatcher extends AppCompatActivity {
 
 

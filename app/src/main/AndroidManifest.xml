@@ -23,6 +23,7 @@
         <activity android:name=".TecnicActivity" />
         <activity android:name=".IncidenciaActivity" />
         <activity android:name=".IncidenciesRV" />
+        <activity android:name=".ConsultaIncidencia"/>
     </application>
 
 </manifest>

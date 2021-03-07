@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/etSolucioIncidencia"
+        android:id="@+id/solucioIncidenciaTextViewConsulta"
         android:layout_width="351dp"
         android:layout_height="75dp"
         android:layout_marginTop="328dp"
@@ -83,7 +83,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/eTdescripcioIncidencia"
+        android:id="@+id/descripcioIncidenciaTextViewConsulta"
         android:layout_width="351dp"
         android:layout_height="75dp"
         android:layout_marginTop="196dp"
@@ -101,7 +101,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.135"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eTdescripcioIncidencia" />
+        app:layout_constraintTop_toBottomOf="@+id/descripcioIncidenciaTextViewConsulta" />
 
     <TextView
         android:id="@+id/textView13"
@@ -112,16 +112,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.096"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSolucioIncidencia" />
+        app:layout_constraintTop_toBottomOf="@+id/solucioIncidenciaTextViewConsulta" />
 
     <ImageView
-        android:id="@+id/imatgeIncidencia"
+        android:id="@+id/imatgeIncidenciaConsulta"
         android:layout_width="253dp"
         android:layout_height="123dp"
         android:layout_marginTop="76dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSolucioIncidencia"
+        app:layout_constraintTop_toBottomOf="@+id/solucioIncidenciaTextViewConsulta"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
@@ -140,7 +140,7 @@
         android:layout_width="177dp"
         android:layout_height="60dp"
         android:layout_marginBottom="36dp"
-        android:text="Menu"
+        android:text="Torna"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.86"
@@ -157,5 +157,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView13"
-        app:layout_constraintTop_toBottomOf="@+id/etSolucioIncidencia" />
+        app:layout_constraintTop_toBottomOf="@+id/solucioIncidenciaTextViewConsulta" />
 </androidx.constraintlayout.widget.ConstraintLayout>

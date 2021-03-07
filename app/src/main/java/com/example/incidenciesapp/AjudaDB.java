@@ -18,9 +18,12 @@ import static com.example.incidenciesapp.DBInterface.VERSIO;
 
 public class AjudaDB extends SQLiteOpenHelper {
 
+    //Crea el  contexte de connexio amb la BBDD
     AjudaDB(Context context){
         super(context, NOM_BBDD, null, VERSIO);
     }
+
+    //Executa les sentencies de creacio de les taules quan es crea la BBDD
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
@@ -32,6 +35,7 @@ public class AjudaDB extends SQLiteOpenHelper {
         }
     }
 
+    //Executa la sentencia de creacio de les taules quan s' actualitza la versio de la BBDD
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+ TAULA_TRENS);

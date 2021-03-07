@@ -1,8 +1,10 @@
 package com.example.incidenciesapp;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Incidencia {
+//Classe POJO per definir un objecte Incidencia
+public class Incidencia implements Serializable {
 
     long incidenciaId;
     String matriculaTrenIncidencia;

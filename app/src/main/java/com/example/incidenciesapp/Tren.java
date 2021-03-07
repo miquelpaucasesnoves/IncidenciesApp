@@ -1,5 +1,6 @@
 package com.example.incidenciesapp;
 
+//Implementació de la classe Tren POJO a la BBDD
 public class Tren {
 
     String matriculaTren;

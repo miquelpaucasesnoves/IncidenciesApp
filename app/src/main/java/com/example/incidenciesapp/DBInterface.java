@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class DBInterface {
 
-    //Declaracio de constants
+    //Declaracio de constants per facilitar l'us de la BBDD
     public static final String TAULA_TRENS = "trens";
     public static final String CLAU_MATRICULA_TREN = "tren_id";
 
@@ -32,7 +32,7 @@ public class DBInterface {
     public static final String CLAU_FOTO_INCIDENCIA = "incidencia_foto";
 
     public static final String[] COLUMNES_INCIDENCIES = new String[]{CLAU_ID_INCIDENCIA,
-            CLAU_TREN_INCIDENCIA, CLAU_TECNIC_INCIDENCIA,
+            CLAU_TREN_INCIDENCIA, CLAU_TECNIC_INCIDENCIA,CLAU_DATA_INCIDENCIA,
             CLAU_DESCRIPCIO_INCIDENCIA, CLAU_SOLUCIO_INCIDENCIA, CLAU_FOTO_INCIDENCIA};
 
     public static final String NOM_BBDD = "incidencies.db";
@@ -96,16 +96,28 @@ public class DBInterface {
     }
 
     //Per insertar una incidencia
-    public Incidencia insereixIncidencia(Incidencia incidencia){
+    public long insereixIncidencia(Incidencia incidencia){
         ContentValues initialValues = new ContentValues();
         initialValues.put(CLAU_TECNIC_INCIDENCIA,incidencia.matriculaTecnicIncidencia);
         initialValues.put(CLAU_TREN_INCIDENCIA,incidencia.matriculaTrenIncidencia);
         initialValues.put(CLAU_DATA_INCIDENCIA, incidencia.dataIncidencia);
         initialValues.put(CLAU_DESCRIPCIO_INCIDENCIA,incidencia.descripcioIncidencia);
-        long insertId = bd.insert(TAULA_INCIDENCIES,null,initialValues);
-        incidencia.setIncidenciaId(insertId);
-        return incidencia;
+        return bd.insert(TAULA_INCIDENCIES,null,initialValues);
     }
+
+    //Per editar una incidencia
+    public boolean editaIncidencia(Incidencia incidencia) {
+        ContentValues values = new ContentValues();
+        values.put(CLAU_TREN_INCIDENCIA,incidencia.matriculaTrenIncidencia);
+        values.put(CLAU_TECNIC_INCIDENCIA, incidencia.matriculaTecnicIncidencia);
+        values.put(CLAU_DESCRIPCIO_INCIDENCIA,incidencia.descripcioIncidencia);
+        values.put(CLAU_SOLUCIO_INCIDENCIA,incidencia.solucioIncidencia);
+        values.put(CLAU_FOTO_INCIDENCIA,incidencia.fotoIncidencia);
+
+        return bd.update(TAULA_INCIDENCIES, values, CLAU_ID_INCIDENCIA + " = " + incidencia.incidenciaId, null) > 0;
+    }
+
+
 
     //Per retornar tots els trens
     public ArrayList<Tren> getAllTrens() {
@@ -117,11 +129,11 @@ public class DBInterface {
             trens.add(tren);
             cursor.moveToNext();
         }
-        // Make sure to close the cursor
         cursor.close();
         return trens;
     }
 
+    //Transforma un objecte Cursor en un objecte Tren
     private Tren cursorToTren(Cursor cursor) {
         Tren tren = new Tren();
         tren.setTrenId(cursor.getString(0));
@@ -144,11 +156,10 @@ public class DBInterface {
             tecnics.add(tecnic);
             cursor.moveToNext();
         }
-        // Make sure to close the cursor
         cursor.close();
         return tecnics;
     }
-
+    //Retorna un tecnic passant un id per parametre
     public Tecnic getTecnic(String tecnicId) {
         Cursor cursor = bd.query(TAULA_TECNICS, new String[]{CLAU_MATRICULA_TECNIC,CLAU_NOM_TECNIC,CLAU_TELEFON_TECNIC}, CLAU_MATRICULA_TECNIC + "=" + tecnicId, null, null, null, null);
         if (cursor != null) {
@@ -157,6 +168,8 @@ public class DBInterface {
             return cursorToTecnic(cursor);
     }
 
+    //Retorna la id d'un tecnic passant-li un nom per parametre
+    // (Es podria implementar la APP tan sols amb la funció d' adalt getTecnic)
     public String getTecnicId(String nomTecnic) {
         Cursor cursor = bd.query(TAULA_TECNICS, new String[]{CLAU_MATRICULA_TECNIC,CLAU_NOM_TECNIC,CLAU_TELEFON_TECNIC}, CLAU_NOM_TECNIC + " = " + nomTecnic, null, null, null, null);
         if (cursor != null) {
@@ -164,6 +177,8 @@ public class DBInterface {
         }
         return cursor.getString(0);
     }
+
+    //Transforma un objecte Cursor en un objecte Tecnic
     private Tecnic cursorToTecnic(Cursor cursor) {
         Tecnic tecnic = new Tecnic();
         tecnic.setMatricula(cursor.getString(0));
@@ -173,13 +188,13 @@ public class DBInterface {
         return tecnic;
     }
 
+    //Retorna un llistat de tots els objectes Incidencia de la BBDD
     public ArrayList<Incidencia> getAllIncidencies() {
         ArrayList<Incidencia> incidencies = new ArrayList<Incidencia>();
         Cursor cursor = bd.query(TAULA_INCIDENCIES,COLUMNES_INCIDENCIES , null, null, null, null, CLAU_ID_INCIDENCIA + " ASC");
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Incidencia incidicencia = cursorToIncidencia(cursor);
-            incidencies.add(incidicencia);
+            incidencies.add(cursorToIncidencia(cursor));
             cursor.moveToNext();
         }
         // Make sure to close the cursor
@@ -187,14 +202,16 @@ public class DBInterface {
         return incidencies;
     }
 
+    //Transforma un objecte Cursor en un objecte Incidencia
     private Incidencia cursorToIncidencia(Cursor cursor) {
         Incidencia incidencia = new Incidencia();
-        incidencia.setTrenIdIncidencia(cursor.getString(0));
-        incidencia.setMatriculaTecnicIncidencia(cursor.getString(1));
-        incidencia.setDataIncidencia(cursor.getString(2));
-        incidencia.setDescripcioIncidencia(cursor.getString(3));
-        incidencia.setSolucioIncidencia(cursor.getString(4));
-        incidencia.setFotoIncidencia(cursor.getBlob(5));
+        incidencia.setIncidenciaId(cursor.getLong(0));
+        incidencia.setTrenIdIncidencia(cursor.getString(1));
+        incidencia.setMatriculaTecnicIncidencia(cursor.getString(2));
+        incidencia.setDataIncidencia(cursor.getString(3));
+        incidencia.setDescripcioIncidencia(cursor.getString(4));
+        incidencia.setSolucioIncidencia(cursor.getString(5));
+        incidencia.setFotoIncidencia(cursor.getBlob(6));
 
         return incidencia;
     }

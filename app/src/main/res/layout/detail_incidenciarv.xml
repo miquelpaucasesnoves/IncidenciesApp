@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/textView11"
@@ -72,7 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/num_incidencia_rv" />
 
     <TextView
-        android:id="@+id/data_incidencia_rv"
+        android:id="@+id/dataIncidenciaRV"
         android:layout_width="81dp"
         android:layout_height="18dp"
         android:layout_marginTop="16dp"
@@ -89,7 +89,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.619"
         app:layout_constraintStart_toEndOf="@+id/textView15"
-        app:layout_constraintTop_toBottomOf="@+id/data_incidencia_rv" />
+        app:layout_constraintTop_toBottomOf="@+id/dataIncidenciaRV" />
 
     <TextView
         android:id="@+id/textView21"

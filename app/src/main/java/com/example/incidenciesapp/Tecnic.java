@@ -1,5 +1,6 @@
 package com.example.incidenciesapp;
 
+//Definició de la classe POJO Tecnic de la BBDD
 public class Tecnic {
 
     String matriculaTecnic;
