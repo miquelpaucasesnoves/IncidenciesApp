@@ -3,6 +3,7 @@ package com.example.incidenciesapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+         btnActivityTren = (Button) findViewById(R.id.btnActivityTren);
+         btnActivityTecnic = (Button) findViewById(R.id.btnActivityTecnics);
+         btnActivityIncidencia = (Button) findViewById(R.id.btnActivityIncidencia);
+         btnActivityLlistatIncidencies = (Button) findViewById(R.id.btnActivityLlistatIncidencies);
+
         btnActivityTren.setOnClickListener(this);
         btnActivityIncidencia.setOnClickListener(this);
         btnActivityTecnic.setOnClickListener(this);
@@ -29,24 +35,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
-            case R.id.btnAfegirTren:
-                Intent trenIntent = new Intent(this,Tren.class);
+        int id = v.getId();
+
+        switch (id){
+            case R.id.btnActivityTren:
+                Intent trenIntent = new Intent(this,TrenActivity.class);
                 startActivity(trenIntent);
                 break;
 
-            case R.id.btnAfegirTecnic:
-                Intent tecnicIntent = new Intent(this, Tecnic.class);
+            case R.id.btnActivityTecnics:
+                Intent tecnicIntent = new Intent(this, TecnicActivity.class);
                 startActivity(tecnicIntent);
                 break;
-            case R.id.btnAfegirIncidencia:
-                Intent incidenciaIntent = new Intent(this,Incidencia.class);
+            case R.id.btnActivityIncidencia:
+                Intent incidenciaIntent = new Intent(this,IncidenciaActivity.class);
                 startActivity(incidenciaIntent);
                 break;
             case R.id.btnActivityLlistatIncidencies:
-                Intent llistatIncidencies = new Intent(this,)
-
+                Intent llistatIncidencies = new Intent(this,IncidenciesRV.class);
+                startActivity(llistatIncidencies);
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        SharedPreferences prefs = getSharedPreferences("X", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("lastActivity", getClass().getName());
+        editor.commit();
     }
 }

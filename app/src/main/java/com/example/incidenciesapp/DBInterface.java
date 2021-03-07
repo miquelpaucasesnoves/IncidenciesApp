@@ -4,8 +4,10 @@ package com.example.incidenciesapp;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -33,8 +35,7 @@ public class DBInterface {
             CLAU_TREN_INCIDENCIA, CLAU_TECNIC_INCIDENCIA,
             CLAU_DESCRIPCIO_INCIDENCIA, CLAU_SOLUCIO_INCIDENCIA, CLAU_FOTO_INCIDENCIA};
 
-    public static final String TAG = "DBInterface";
-    public static final String NOM_BBDD = "incidenciesDB";
+    public static final String NOM_BBDD = "incidencies.db";
 
 
     public static final int VERSIO = 1;
@@ -47,11 +48,12 @@ public class DBInterface {
             + CLAU_TECNIC_INCIDENCIA + " TEXT NOT NULL, " + CLAU_DATA_INCIDENCIA + " TEXT NOT NULL, "
             + CLAU_DESCRIPCIO_INCIDENCIA + " TEXT NOT NULL, "
             + CLAU_SOLUCIO_INCIDENCIA + " TEXT, "
-            + CLAU_FOTO_INCIDENCIA + "BLOB);";
+            + CLAU_FOTO_INCIDENCIA + " BLOB)";
+     //       + " FOREIGN KEY ("+ CLAU_TREN_INCIDENCIA +") REFERENCES "+TAULA_TRENS+"("+CLAU_MATRICULA_TREN +") "
+     //       + " FOREIGN KEY ("+CLAU_TECNIC_INCIDENCIA+") REFERENCES "+TAULA_TECNICS+"("+CLAU_MATRICULA_TECNIC+"))";
 
     public static final String CREATE_TAULA_TRENS = "create table " + TAULA_TRENS +
             "(" + CLAU_MATRICULA_TREN + " TEXT PRIMARY KEY);";
-
 
 
     private  final Context context;
@@ -68,6 +70,7 @@ public class DBInterface {
     //Obri la BBDD
     public DBInterface obre() throws SQLException {
         bd = ajuda.getReadableDatabase();
+
         return this;
     }
 
@@ -95,13 +98,12 @@ public class DBInterface {
     //Per insertar una incidencia
     public Incidencia insereixIncidencia(Incidencia incidencia){
         ContentValues initialValues = new ContentValues();
-        initialValues.put(CLAU_MATRICULA_TECNIC,incidencia.matriculaTecnicIncidencia);
+        initialValues.put(CLAU_TECNIC_INCIDENCIA,incidencia.matriculaTecnicIncidencia);
         initialValues.put(CLAU_TREN_INCIDENCIA,incidencia.matriculaTrenIncidencia);
-        initialValues.put(CLAU_DATA_INCIDENCIA, String.valueOf(incidencia.getDataIncidencia()));
+        initialValues.put(CLAU_DATA_INCIDENCIA, incidencia.dataIncidencia);
         initialValues.put(CLAU_DESCRIPCIO_INCIDENCIA,incidencia.descripcioIncidencia);
-        long insertId = bd.insert(TAULA_INCIDENCIES, null, initialValues);
+        long insertId = bd.insert(TAULA_INCIDENCIES,null,initialValues);
         incidencia.setIncidenciaId(insertId);
-        bd.insert(TAULA_INCIDENCIES,null,initialValues);
         return incidencia;
     }
 
@@ -131,8 +133,11 @@ public class DBInterface {
     //En principi nomes vull que ens retorni el nom del tecnic;
     // ja que fare una petita implementacio on l'escenari principal es la taula incidencies
     public ArrayList<Tecnic> getAllTecnics() {
+
         ArrayList<Tecnic> tecnics = new ArrayList<Tecnic>();
-        Cursor cursor = bd.query(TAULA_TECNICS, new String[]{CLAU_NOM_TECNIC}, null, null, null, null, CLAU_MATRICULA_TECNIC + " ASC");
+        Cursor cursor;
+
+        cursor = bd.query(TAULA_TECNICS, new String[]{CLAU_MATRICULA_TECNIC,CLAU_NOM_TECNIC,CLAU_TELEFON_TECNIC}, null, null, null, null, CLAU_MATRICULA_TECNIC + " ASC");
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Tecnic tecnic = cursorToTecnic(cursor);
@@ -144,6 +149,21 @@ public class DBInterface {
         return tecnics;
     }
 
+    public Tecnic getTecnic(String tecnicId) {
+        Cursor cursor = bd.query(TAULA_TECNICS, new String[]{CLAU_MATRICULA_TECNIC,CLAU_NOM_TECNIC,CLAU_TELEFON_TECNIC}, CLAU_MATRICULA_TECNIC + "=" + tecnicId, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+            return cursorToTecnic(cursor);
+    }
+
+    public String getTecnicId(String nomTecnic) {
+        Cursor cursor = bd.query(TAULA_TECNICS, new String[]{CLAU_MATRICULA_TECNIC,CLAU_NOM_TECNIC,CLAU_TELEFON_TECNIC}, CLAU_NOM_TECNIC + " = " + nomTecnic, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor.getString(0);
+    }
     private Tecnic cursorToTecnic(Cursor cursor) {
         Tecnic tecnic = new Tecnic();
         tecnic.setMatricula(cursor.getString(0));
@@ -177,6 +197,21 @@ public class DBInterface {
         incidencia.setFotoIncidencia(cursor.getBlob(5));
 
         return incidencia;
+    }
+    //Editar un tecnic
+    public boolean editaTecnic(Tecnic tecnic) {
+            ContentValues values = new ContentValues();
+            values.put(CLAU_MATRICULA_TECNIC, tecnic.matriculaTecnic);
+            values.put(CLAU_NOM_TECNIC, tecnic.nomTecnic);
+            values.put(CLAU_TELEFON_TECNIC, tecnic.telefonTecnic);
+
+            return bd.update(TAULA_TECNICS, values, CLAU_MATRICULA_TECNIC + " = " + tecnic.matriculaTecnic, null) > 0;
+        }
+
+
+    //Esborra un tecnic
+    public boolean borraTecnic(String tecnicId) {
+        return bd.delete(TAULA_TECNICS, CLAU_MATRICULA_TECNIC + " = " + tecnicId, null) > 0;
     }
 }
 

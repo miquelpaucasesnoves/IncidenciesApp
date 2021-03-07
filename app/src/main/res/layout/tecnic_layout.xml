@@ -6,6 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/btnBorrarTecnic"
+        android:layout_width="144dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="88dp"
+        android:text="Borrar Tecnic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.453"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAfegirTecnic" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -32,10 +43,10 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="44dp"
         android:text="Matricula"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintHorizontal_bias="0.252"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -52,8 +63,8 @@
 
     <EditText
         android:id="@+id/eTmatriculaTecnicTecnicLayout"
-        android:layout_width="106dp"
-        android:layout_height="36dp"
+        android:layout_width="124dp"
+        android:layout_height="46dp"
         android:layout_marginStart="52dp"
         android:layout_marginTop="96dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,4 +102,15 @@
         app:layout_constraintHorizontal_bias="0.449"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnEditarTecnic"
+        android:layout_width="144dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="20dp"
+        android:text="Editar Tecnic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.453"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAfegirTecnic" />
 </androidx.constraintlayout.widget.ConstraintLayout>

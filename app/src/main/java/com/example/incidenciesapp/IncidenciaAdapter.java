@@ -15,32 +15,32 @@ public class IncidenciaAdapter extends RecyclerView.Adapter<IncidenciaAdapter.In
 
     private ArrayList<Incidencia> llista_incidencies;
     private Context context;
-    private OnItemClickListener listener;
+   // private OnItemClickListener listener;
 
-    public IncidenciaAdapter(Context context, ArrayList<Incidencia> llista_incidencies, OnItemClickListener listener) {
+    public IncidenciaAdapter(Context context, ArrayList<Incidencia> llista_incidencies) {
         this.llista_incidencies = llista_incidencies;
         this.context = context;
-        this.listener = listener;
+     //   this.listener = listener;
     }
-
+/*
     public interface OnItemClickListener {
         void onItemClick(Incidencia incidencia);
     }
-
+*/
     @NonNull
     @Override
     public IncidenciaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
 
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.detall_incidencia_rv, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.detail_incidenciarv, parent, false);
         IncidenciaViewHolder incidenciaVH = new IncidenciaViewHolder(view);
-        return incidenciaVH;
+        return new IncidenciaViewHolder(view);
 
     }
 
     @Override
     public void onBindViewHolder(IncidenciaViewHolder holder, int position) {
-        holder.bindIncidencia(llista_incidencies.get(position),listener);
+        holder.bindIncidencia(llista_incidencies.get(position));
     }
 
     @Override
@@ -61,36 +61,39 @@ public class IncidenciaAdapter extends RecyclerView.Adapter<IncidenciaAdapter.In
     }
 
 
-    public static class IncidenciaViewHolder extends RecyclerView.ViewHolder {
+    public static class IncidenciaViewHolder extends RecyclerView.ViewHolder{
 
-        private Context Context;
         TextView numIncidencia;
         TextView matriculaTrenIncidencia;
         TextView nomTecnicIncidencia;
         TextView dataIncidencia;
         TextView descripcioIncidencia;
 
+        Context context;
+        DBInterface bd = new DBInterface(context);
 
         public IncidenciaViewHolder(@NonNull View itemView) {
 
             super(itemView);
 
-           numIncidencia = (TextView) itemView.findViewById(R.id.num_incidencia_rv);
-           matriculaTrenIncidencia = (TextView) itemView.findViewById(R.id.matricula_tren_rv);
-           nomTecnicIncidencia = (TextView) itemView.findViewById(R.id.nom_tecnic_rv);
-           dataIncidencia = (TextView) itemView.findViewById(R.id.data_incidencia_rv);
-           descripcioIncidencia = (TextView) itemView.findViewById(R.id.descripcio_incidencia_rv);
+            numIncidencia = (TextView) itemView.findViewById(R.id.num_incidencia_rv);
+            matriculaTrenIncidencia = (TextView) itemView.findViewById(R.id.matricula_tren_rv);
+            nomTecnicIncidencia = (TextView) itemView.findViewById(R.id.nom_tecnic_rv);
+            dataIncidencia = (TextView) itemView.findViewById(R.id.data_incidencia_rv);
+            descripcioIncidencia = (TextView) itemView.findViewById(R.id.descripcio_incidencia_rv);
         }
 
 
-        public void bindIncidencia(Incidencia incidencia, OnItemClickListener listener) {
-            numIncidencia.setText(incidencia.getIncidenciaId());
-            matriculaTrenIncidencia.setText(incidencia.getTrenIdIncidencia());
-            nomTecnicIncidencia.setText(incidencia.getMatriculaTecnicIncidencia());
-            dataIncidencia.setText(incidencia.getDataIncidencia());
-            descripcioIncidencia.setText(incidencia.getDescripcioIncidencia());
+        public void bindIncidencia(Incidencia incidencia) {
+            numIncidencia.setText(String.valueOf(incidencia.incidenciaId));
+            matriculaTrenIncidencia.setText(incidencia.matriculaTrenIncidencia);
+            bd.obre();
+            nomTecnicIncidencia.setText(bd.getTecnic(incidencia.matriculaTecnicIncidencia).nomTecnic);
+            bd.tanca();
+            dataIncidencia.setText(incidencia.dataIncidencia);
+            descripcioIncidencia.setText(incidencia.descripcioIncidencia);
 
-
+/*
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
              //       listener.onItemClick(incidencia);
@@ -98,6 +101,9 @@ public class IncidenciaAdapter extends RecyclerView.Adapter<IncidenciaAdapter.In
             });
 
         }
+*/
 
+
+        }
     }
 }

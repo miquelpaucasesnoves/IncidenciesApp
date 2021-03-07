@@ -3,10 +3,12 @@ package com.example.incidenciesapp;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
@@ -27,8 +29,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +40,9 @@ public class IncidenciaActivity extends AppCompatActivity implements View.OnClic
 
     private int GALLERY_REQUEST_CODE = 1;
     private int APP_PERMISSION_READ_STORAGE = 1;
+
+    private static final int IMAGE_PICK_CODE = 1000;
+    private static final int PERMISSION_CODE = 1001;
 
     private ArrayList<Tren> llista_trens;
     private ArrayList<Tecnic> llista_tecnics;
@@ -66,7 +73,6 @@ public class IncidenciaActivity extends AppCompatActivity implements View.OnClic
 
         descripcioIncidenciaET = findViewById(R.id.eTdescripcioIncidencia);
         solucioIncidenciaET = findViewById(R.id.etSolucioIncidencia);
- //       editData = findViewById(R.id.);
         btnAfegirIncidencia = (Button) findViewById(R.id.btnAfegirIncidencia);
         btnAfegeixFoto = (Button) findViewById(R.id.btnAfegirFoto);
         btnTorna = (Button) findViewById(R.id.btnTornaMenuIncidencia);
@@ -95,80 +101,76 @@ public class IncidenciaActivity extends AppCompatActivity implements View.OnClic
             Incidencia incidencia = generaIncidencia();
 
             bd.obre();
-
+            bd.insereixIncidencia(incidencia);
             if (incidencia == null) {
-                Toast.makeText(this, "Posi un nom i un genere correcte", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Camps obligatoris per crear una incidencia son: Matricula Tren,Tecnic i descripcio", Toast.LENGTH_SHORT).show();
             } else if (bd.insereixIncidencia(incidencia).getIncidenciaId() != -1) {
                 Toast.makeText(this, "Incidencia Afegida correctament", Toast.LENGTH_SHORT).show();
                 bd.tanca();
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
                 finish();
-            } else {
+                //    } else {
                 Toast.makeText(this, "Error a l’afegir BBDD", Toast.LENGTH_SHORT).show();
-            }
-        }else if(v == btnAfegeixFoto){
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, APP_PERMISSION_READ_STORAGE);
-            }
-            recullDeGaleria();
+                //    }
+            } else if (v == btnAfegeixFoto) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, APP_PERMISSION_READ_STORAGE);
+                }
+                recullDeGaleria();
 //        }else if(v == editData){
 //            mostraData();
-        }else if (v == btnTorna) {
-            finish();
+            } else if (v == btnTorna) {
+                finish();
+            }
         }
     }
-
     public Incidencia generaIncidencia(){
         if(tren != null && tecnic != null && !descripcioIncidenciaET.getText().toString().isEmpty()){
             incidencia = new Incidencia();
-            incidencia.setTrenIdIncidencia(tren.getTrenId());
-            incidencia.setMatriculaTecnicIncidencia((tecnic.getMatricula()));
-            incidencia.setDataIncidencia(String.valueOf(Date.from(Instant.now())));
+            incidencia.setTrenIdIncidencia(spinnerTren.getSelectedItem().toString());
+
+            Tecnic t = llista_tecnics.get(spinnerTecnic.getSelectedItemPosition()-1);
+            incidencia.setMatriculaTecnicIncidencia(t.matriculaTecnic);
+
+            Date avui = Calendar.getInstance().getTime();
+            incidencia.setDataIncidencia(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(avui));
+
             incidencia.setDescripcioIncidencia(descripcioIncidenciaET.getText().toString());
             incidencia.setSolucioIncidencia(solucioIncidenciaET.getText().toString());
-            incidencia.setFotoIncidencia(bitmapmap);
+
+            Toast.makeText(getApplicationContext(),incidencia.matriculaTrenIncidencia,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),incidencia.matriculaTecnicIncidencia,Toast.LENGTH_SHORT).show();
+
+
+
+            if (fotoIncidencia.getDrawable() != null) {
+                Bitmap bitmap = ((BitmapDrawable) fotoIncidencia.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] imageInByte = baos.toByteArray();
+
+                incidencia.setFotoIncidencia(bitmapmap);
+            }
+
         }
         return incidencia;
     }
 
     private void recullDeGaleria(){
-        //Cream l'Intent amb l'acció ACTION_PICK
-        Intent intent=new Intent(Intent.ACTION_PICK);
-        // Establim tipus d'imatges, per tant només s'acceptaran els tipus imagtge
+        //intent to pick image
+        Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
-        //Establim uns tipus de format de fotografia per assegurar-nos d'acceptar només aquest tipus de format jpg i png
-        String[] mimeTypes = {"image/jpeg", "image/png"};
-        intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
-        // Llançam l'Intent
-        startActivityForResult(intent,GALLERY_REQUEST_CODE);
+        startActivityForResult(intent, IMAGE_PICK_CODE);
     }
 
     public void onActivityResult(int requestCode,int resultCode,Intent data) {
         // Result code is RESULT_OK only if the user selects an Image
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GALLERY_REQUEST_CODE) {//data.getData return the content URI for the selected Image
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                // Get the cursor
-                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                // Move to first row
-                cursor.moveToFirst();
-                //Get the column index of MediaStore.Images.Media.DATA
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                //Gets the String value in the column
-                String imgDecodableString = cursor.getString(columnIndex);
-                cursor.close();
-                // Set the Image in ImageView after decoding the String
-                imatge_bitmap = BitmapFactory.decodeFile(imgDecodableString);
 
-                ByteArrayOutputStream blob = new ByteArrayOutputStream();
-                imatge_bitmap.compress(Bitmap.CompressFormat.JPEG, 0 /* Ignored for PNGs */, blob);
-                bitmapmap = blob.toByteArray();
-                fotoIncidencia.setImageBitmap(imatge_bitmap);
-
-            }
+        if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE){
+            //set image to image view
+            fotoIncidencia.setImageURI(data.getData());
         }
     }
 
@@ -203,7 +205,7 @@ public class IncidenciaActivity extends AppCompatActivity implements View.OnClic
         string_tecnics.add("Selecciona tecnic..");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             for (int i = 0; i<llista_tecnics.size();i++){
-                string_tecnics.add(llista_tecnics.get(i).getMatricula());
+                string_tecnics.add(llista_tecnics.get(i).getNomTecnic());
             }
         }
 
@@ -231,5 +233,15 @@ public class IncidenciaActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        SharedPreferences prefs = getSharedPreferences("X", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("lastActivity", getClass().getName());
+        editor.commit();
     }
 }
